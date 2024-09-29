@@ -1,20 +1,15 @@
 
-import IngredientCalculator from './components/IngredientCalculator';
 import './App.scss';
-import { Route, Routes } from 'react-router-dom'
-import Header from './components/header'
-import IngredientCalculatorManager from './components/home'
+import IngredientCalculator from './components/home/IngredientCalculatorManager'
+
 function App() {
     return (
         <div className="App">
-            <Header/>
-            <Routes>
+           
      
-             
-                <Route path="/services" element={<IngredientCalculator />} />
+      
                 
-                <Route path="/" element={<IngredientCalculatorManager/>} />
-            </Routes>
+             <IngredientCalculator/>  
             
         </div>
     );
