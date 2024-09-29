@@ -5,6 +5,8 @@ $active-color: #FF5733; // Red color for active buttons
 $background-color: #f9f9f9; // Light background color
 $text-color: #333; // Dark text color
 $border-radius: 5px; // Rounded corners
+$button-padding: 12px 20px; // Padding for buttons
+$button-margin: 5px; // Margin between buttons
 
 .ingredient-calculator {
     max-width: 600px; // Maximum width for larger screens
@@ -22,7 +24,7 @@ $border-radius: 5px; // Rounded corners
 
     .quick-select {
         display: flex;
-        justify-content: space-around;
+        justify-content: center; // Center buttons
         flex-wrap: wrap; // Allow buttons to wrap on smaller screens
         margin-bottom: 20px;
 
@@ -30,10 +32,12 @@ $border-radius: 5px; // Rounded corners
             background-color: $primary-color;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: $button-padding; // Use variable for padding
+            margin: $button-margin; // Use variable for margin
             border-radius: $border-radius;
             cursor: pointer;
             transition: background-color 0.3s;
+            flex: 1 1 120px; // Allow buttons to grow and shrink, with a minimum width
 
             &.active {
                 background-color: $active-color; // Change to red when active
@@ -66,7 +70,7 @@ $border-radius: 5px; // Rounded corners
             background-color: $primary-color;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: $button-padding; // Use variable for padding
             border-radius: $border-radius;
             cursor: pointer;
             transition: background-color 0.3s;
