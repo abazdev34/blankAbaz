@@ -1,23 +1,16 @@
-// IngredientCalculator.jsx
-import React, { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { ingredientsData } from '../../data/index.jsx';
 
 const IngredientCalculator = () => {
-    const [searchTerm, setSearchTerm] = useState('');
     const [selectedDish, setSelectedDish] = useState('');
-    const [multiplier, setMultiplier] = useState(1);
     const [result, setResult] = useState(null);
     const [totalWeight, setTotalWeight] = useState(0);
+    const [multiplier, setMultiplier] = useState(1); // Keep multiplier for calculations
 
-    const filteredDishes = useMemo(() => {
-        return Object.keys(ingredientsData).filter(dishName =>
-            dishName.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [searchTerm]);
+    const quickSelectDishes = ['пико', 'плов', 'соустако', 'рисзапровка'];
 
     const handleDishSelect = (dish) => {
         setSelectedDish(dish);
-        setSearchTerm(dish);
     };
 
     const calculateIngredients = () => {
@@ -43,25 +36,16 @@ const IngredientCalculator = () => {
     return (
         <div className="ingredient-calculator">
             <h1>Ингредиенттерди эсептөө</h1>
-            <div className="search-container">
-                <input
-                    type="text"
-                    placeholder="Тамак издөө..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                {searchTerm && filteredDishes.length > 0 && (
-                    <ul className="search-results">
-                        {filteredDishes.map(dish => (
-                            <li 
-                                key={dish}
-                                onClick={() => handleDishSelect(dish)}
-                            >
-                                {dish}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+            <div className="quick-select">
+                {quickSelectDishes.map(dish => (
+                    <button 
+                        key={dish} 
+                        onClick={() => handleDishSelect(dish)} 
+                        className={selectedDish === dish ? 'active' : ''}
+                    >
+                        {dish}
+                    </button>
+                ))}
             </div>
             <div className="input-container">
                 <input
