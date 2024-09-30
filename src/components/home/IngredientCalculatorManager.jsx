@@ -5,9 +5,9 @@ const IngredientCalculator = () => {
     const [selectedDish, setSelectedDish] = useState('');
     const [result, setResult] = useState(null);
     const [totalWeight, setTotalWeight] = useState(0);
-    const [multiplier, setMultiplier] = useState(1); // Keep multiplier for calculations
+    const [multiplier, setMultiplier] = useState(1); 
 
-    const quickSelectDishes = ['пико', 'курицаМаринад', 'соустако', 'рисзапровка','специКурица'];
+    const quickSelectDishes = ['пико', 'курица_маринад', 'соустако', 'рисзапровка','специКурица'];
 
     const handleDishSelect = (dish) => {
         setSelectedDish(dish);
