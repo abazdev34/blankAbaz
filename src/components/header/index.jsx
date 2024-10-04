@@ -10,9 +10,9 @@ const Header
 				</div>
 				<div className="header__nav">
 					<NavLink to='/'> Home </NavLink>
-					<NavLink to='/about'> About </NavLink>
-					<NavLink to='/contact'> Contact </NavLink>
-					<NavLink to='/services'> Services </NavLink>
+					<NavLink to='/IngredientCalculator'> Заготовки </NavLink>
+					<NavLink to='/dishes'> Блюдо </NavLink>
+			
 				</div>
 			</div>
 			

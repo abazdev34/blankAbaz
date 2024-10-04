@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { ingredientsData } from '../../data/index.jsx'
 
-const IngredientCalculator = () => {
+const Dish  = () => {
 	const [selectedDish, setSelectedDish] = useState('')
 	const [result, setResult] = useState(null)
 	const [totalWeight, setTotalWeight] = useState(0)
 	const [multiplier, setMultiplier] = useState(1)
 
 	const quickSelectDishes = [
-		'курицаМ ',
+		'ЧикенСлайдер',
 		'специКурица',
 		'курицаМаринад',
 		'рисЗапровка',
@@ -58,8 +58,11 @@ const IngredientCalculator = () => {
 					</button>
 				))}
 			</div>
-			<div className='input-container'>
+			<div  className='input-container'>
 				<input
+				style={
+					{display:"none"}
+				}
 					type='number'
 					placeholder='Кобоюткуч'
 					value={multiplier}
@@ -96,4 +99,5 @@ const IngredientCalculator = () => {
 	)
 }
 
-export default IngredientCalculator
+export default Dish
+
