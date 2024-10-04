@@ -1,38 +1,73 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faSave, faCheck } from '@fortawesome/free-solid-svg-icons';
+import './ReceiveInventory.scss';
 
 const ReceiveInventory = ({ onReceive }) => {
   const [item, setItem] = useState('');
   const [amount, setAmount] = useState('');
+  const [tempItems, setTempItems] = useState([]);
+  const [isSaved, setIsSaved] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleAdd = () => {
     if (item && amount) {
-      onReceive(item, Number(amount));
+      setTempItems(prev => [...prev, { item, amount: Number(amount) }]);
       setItem('');
       setAmount('');
+      setIsSaved(false);
     }
+  };
+
+  const handleSave = () => {
+    setIsSaved(true);
+  };
+
+  const handleConfirmReceipt = () => {
+    tempItems.forEach(({ item, amount }) => {
+      onReceive(item, amount);
+    });
+    setTempItems([]);
+    setIsSaved(false);
   };
 
   return (
     <div className="receive-inventory">
       <h2>Товар кабыл алуу</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={item}
-          onChange={(e) => setItem(e.target.value)}
-          placeholder="Товар аты"
-          required
-        />
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Саны"
-          required
-        />
-        <button type="submit">Кабыл алуу</button>
-      </form>
+      <input
+        type="text"
+        value={item}
+        onChange={(e) => setItem(e.target.value)}
+        placeholder="Товар аты"
+        required
+      />
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        placeholder="Саны"
+        required
+      />
+      <button className="add-button" onClick={handleAdd}>
+        <FontAwesomeIcon icon={faPlus} /> Кошуу
+      </button>
+      {tempItems.length > 0 && !isSaved && (
+        <button className="save-button" onClick={handleSave}>
+          <FontAwesomeIcon icon={faSave} /> Сохранить
+        </button>
+      )}
+      {isSaved && (
+        <div className="confirm-section">
+          <p>Товарлар сакталды. Кабыл алууну тастыктоо керек.</p>
+          <button className="confirm-button" onClick={handleConfirmReceipt}>
+            <FontAwesomeIcon icon={faCheck} />
+          </button>
+        </div>
+      )}
+      <ul className="temp-items-list">
+        {tempItems.map((tempItem, index) => (
+          <li key={index}>{tempItem.item}: {tempItem.amount}</li>
+        ))}
+      </ul>
     </div>
   );
 };

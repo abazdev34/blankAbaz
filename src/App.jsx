@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import ReceiveInventory from './components/ReceiveInventory';
 import SendInventory from './components/SendInventory';
 import InventoryStatus from './components/InventoryStatus';
-import ReceiveHistory from './components/ReceiveHistory';
-import SendHistory from './components/SendHistory';
 import './App.scss';
 
 const App = () => {
@@ -11,6 +9,7 @@ const App = () => {
   const [receiveHistory, setReceiveHistory] = useState([]);
   const [sendHistory, setSendHistory] = useState([]);
 
+  // Локалдык сактоодон инвентаризацияны жүктөө
   useEffect(() => {
     const savedInventory = localStorage.getItem('inventory');
     const savedReceiveHistory = localStorage.getItem('receiveHistory');
@@ -20,12 +19,14 @@ const App = () => {
     if (savedSendHistory) setSendHistory(JSON.parse(savedSendHistory));
   }, []);
 
+  // Инвентаризацияны жана тарыхты локалдык сактоого жазуу
   useEffect(() => {
     localStorage.setItem('inventory', JSON.stringify(inventory));
     localStorage.setItem('receiveHistory', JSON.stringify(receiveHistory));
     localStorage.setItem('sendHistory', JSON.stringify(sendHistory));
   }, [inventory, receiveHistory, sendHistory]);
 
+  // Товарды кабыл алуу функциясы
   const handleReceive = (item, amount) => {
     setInventory(prev => ({
       ...prev,
@@ -37,6 +38,7 @@ const App = () => {
     ]);
   };
 
+  // Товарды жөнөтүү функциясы
   const handleSend = (item, amount) => {
     setInventory(prev => ({
       ...prev,
@@ -55,8 +57,6 @@ const App = () => {
         <ReceiveInventory onReceive={handleReceive} />
         <SendInventory onSend={handleSend} inventory={inventory} />
         <InventoryStatus inventory={inventory} />
-        <ReceiveHistory history={receiveHistory} />
-        <SendHistory history={sendHistory} />
       </div>
     </div>
   );
