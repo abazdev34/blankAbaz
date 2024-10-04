@@ -115,3 +115,167 @@ $button-margin: 5px; // Margin between buttons
         }
     }
 }
+.inventory-management {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .inventory-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .inventory-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  input {
+    width: 60px;
+    padding: 5px;
+    margin: 0 10px;
+  }
+  .switch {
+    width: 40px;
+    height: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+  }
+  .switch.active {
+    background-color: #4CAF50;
+  }
+  .switch.active::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background-color: #fff;
+    border-radius: 50%;
+    top: 0;
+    right: 0;
+    transition: 0.3s;
+  }
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .save, .submit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .save {
+    background-color: #f0f0f0;
+  }
+  .submit {
+    background-color: #f0f0f0;
+    color: #000;
+    display: flex;
+    align-items: center;
+  }
+  .submit.active {
+    background-color: #2196F3;
+    color: #fff;
+  }
+  .submit svg {
+    margin-right: 5px;
+  }
+  $primary-color: #007bff;
+  $secondary-color: #6c757d;
+  $success-color: #28a745;
+  $danger-color: #dc3545;
+  $light-color: #f8f9fa;
+  
+  .app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  
+    h1 {
+      text-align: center;
+      color: $primary-color;
+    }
+  
+    .app-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+  
+    .receive-inventory,
+    .send-inventory,
+    .inventory-status,
+    .receive-history,
+    .send-history {
+      background-color: $light-color;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+      h2 {
+        color: $secondary-color;
+        margin-bottom: 15px;
+      }
+  
+      form {
+        display: flex;
+        flex-direction: column;
+  
+        input {
+          margin-bottom: 10px;
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+  
+        button {
+          padding: 10px;
+          background-color: $primary-color;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+  
+          &:hover {
+            background-color: darken($primary-color, 10%);
+          }
+        }
+      }
+  
+      ul {
+        list-style-type: none;
+        padding: 0;
+  
+        li {
+          margin-bottom: 5px;
+          padding: 5px;
+          background-color: white;
+          border-radius: 3px;
+        }
+      }
+    }
+  
+    .receive-inventory button {
+      background-color: $success-color;
+      &:hover {
+        background-color: darken($success-color, 10%);
+      }
+    }
+  
+    .send-inventory button {
+      background-color: $danger-color;
+      &:hover {
+        background-color: darken($danger-color, 10%);
+      }
+    }
+  }
+  

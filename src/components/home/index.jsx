@@ -1,103 +1,187 @@
-import { useState } from 'react'
-import { ingredientsData } from '../../data/index.jsx'
+import React, { useState, useEffect } from 'react';
+import { FaTruck, FaWarehouse } from 'react-icons/fa';
 
-const Dish  = () => {
-	const [selectedDish, setSelectedDish] = useState('')
-	const [result, setResult] = useState(null)
-	const [totalWeight, setTotalWeight] = useState(0)
-	const [multiplier, setMultiplier] = useState(1)
+const initialState = {
+  лук: 0, перец: 0, помидор: 0, чеснок: 0, петурушка: 0,
+  кинза: 0, халопеньно: 0, майонез: 0, вода: 0, чеснокмолотый: 0,
+  черныйперец: 0, оригана: 0, соль: 0, кумин: 0, горошек: 0,
+  морковь: 0, гуруч: 0, масло: 0, койэти: 0
+};
 
-	const quickSelectDishes = [
-		'ЧикенСлайдер',
-		'специКурица',
-		'курицаМаринад',
-		'рисЗапровка',
-		'фаршМариновый',
-		'специФарш',
-		'соусТако',
-		'пико',
-		'фасоловаяПаста',
-		'фасалВаренный',
-	]
+const InventoryManagement = () => {
+  const [inventory, setInventory] = useState(initialState);
+  const [receiveAmount, setReceiveAmount] = useState({});
+  const [sendAmount, setSendAmount] = useState({});
+  const [history, setHistory] = useState([]);
 
-	const handleDishSelect = (dish) => {
-		setSelectedDish(dish)
-	}
+  useEffect(() => {
+    const savedInventory = localStorage.getItem('inventory');
+    const savedHistory = localStorage.getItem('history');
+    if (savedInventory) setInventory(JSON.parse(savedInventory));
+    if (savedHistory) setHistory(JSON.parse(savedHistory));
+  }, []);
 
-	const calculateIngredients = () => {
-		const ingredients = ingredientsData[selectedDish]
-		if (!ingredients) {
-			alert('Тамак тандалган жок.')
-			return
-		}
+  const saveToLocalStorage = () => {
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+    localStorage.setItem('history', JSON.stringify(history));
+  };
 
-		const calculatedIngredients = {}
-		let total = 0
+  const handleReceiveChange = (item, value) => {
+    setReceiveAmount(prev => ({ ...prev, [item]: parseInt(value) || 0 }));
+  };
 
-		for (const key in ingredients) {
-			const weight = ingredients[key] * multiplier
-			calculatedIngredients[key] = weight
-			total += weight
-		}
+  const handleSendChange = (item, value) => {
+    setSendAmount(prev => ({ ...prev, [item]: parseInt(value) || 0 }));
+  };
 
-		setResult(calculatedIngredients)
-		setTotalWeight(total)
-	}
+  const handleReceive = () => {
+    const newInventory = { ...inventory };
+    Object.keys(receiveAmount).forEach(item => {
+      newInventory[item] += receiveAmount[item];
+    });
+    setInventory(newInventory);
+    addToHistory('Кабыл алынды', receiveAmount);
+    setReceiveAmount({});
+  };
 
-	return (
-		<div className='ingredient-calculator'>
-			<h1>Техкарта заготовок</h1>
-			<div className='quick-select'>
-				{quickSelectDishes.map((dish) => (
-					<button
-						key={dish}
-						onClick={() => handleDishSelect(dish)}
-						className={selectedDish === dish ? 'active' : ''}
-					>
-						{dish}
-					</button>
-				))}
-			</div>
-			<div  className='input-container'>
-				<input
-				style={
-					{display:"none"}
-				}
-					type='number'
-					placeholder='Кобоюткуч'
-					value={multiplier}
-					onChange={(e) => setMultiplier(e.target.value)}
-				/>
-				<button onClick={calculateIngredients}>Эсептөө</button>
-			</div>
+  const handleSend = () => {
+    const newInventory = { ...inventory };
+    Object.keys(sendAmount).forEach(item => {
+      newInventory[item] = Math.max(0, newInventory[item] - sendAmount[item]);
+    });
+    setInventory(newInventory);
+    addToHistory('Жөнөтүлдү', sendAmount);
+    setSendAmount({});
+  };
 
-			{result && (
-				<div className='result-container'>
-					<h2>Натыйжа:</h2>
-					<div className='table-container'>
-						<table>
-							<thead>
-								<tr>
-									<th>Ингредиент</th>
-									<th>Масса (кг)</th>
-								</tr>
-							</thead>
-							<tbody>
-								{Object.entries(result).map(([key, value]) => (
-									<tr key={key}>
-										<td>{key}</td>
-										<td>{value.toFixed(3)}</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-					<h3>Жалпы салмак: {totalWeight.toFixed(3)} кг</h3>
-				</div>
-			)}
-		</div>
-	)
-}
+  const addToHistory = (type, amounts) => {
+    const newEntry = {
+      id: Date.now(),
+      date: new Date().toLocaleString(),
+      type,
+      amounts
+    };
+    setHistory(prev => [newEntry, ...prev]);
+  };
 
-export default Dish
+  useEffect(() => {
+    saveToLocalStorage();
+  }, [inventory, history]);
 
+  return (
+    <div className="inventory-management">
+      <h1>Товарларды башкаруу</h1>
+      <div className="inventory-list">
+        {Object.keys(inventory).map(item => (
+          <div key={item} className="inventory-item">
+            <span>{item}: {inventory[item]}</span>
+            <input
+              type="number"
+              value={receiveAmount[item] || ''}
+              onChange={(e) => handleReceiveChange(item, e.target.value)}
+              placeholder="Кабыл алуу"
+            />
+            <input
+              type="number"
+              value={sendAmount[item] || ''}
+              onChange={(e) => handleSendChange(item, e.target.value)}
+              placeholder="Жөнөтүү"
+            />
+          </div>
+        ))}
+      </div>
+      <div className="actions">
+        <button className="receive" onClick={handleReceive}>
+          <FaWarehouse /> Кабыл алуу
+        </button>
+        <button className="send" onClick={handleSend}>
+          <FaTruck /> Жөнөтүү
+        </button>
+      </div>
+      <div className="history">
+        <h2>Тарых</h2>
+        {history.map(entry => (
+          <div key={entry.id} className="history-entry">
+            <span>{entry.date}</span>
+            <span>{entry.type}</span>
+            <ul>
+              {Object.entries(entry.amounts).map(([item, amount]) => (
+                <li key={item}>{item}: {amount}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <style jsx>{`
+        .inventory-management {
+          padding: 20px;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        .inventory-list {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+        .inventory-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        }
+        input {
+          width: 60px;
+          padding: 5px;
+          margin: 0 5px;
+        }
+        .actions {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        }
+        .receive, .send {
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+        }
+        .receive {
+          background-color: #4CAF50;
+          color: white;
+        }
+        .send {
+          background-color: #2196F3;
+          color: white;
+        }
+        .receive svg, .send svg {
+          margin-right: 5px;
+        }
+        .history {
+          border-top: 1px solid #ddd;
+          padding-top: 20px;
+        }
+        .history-entry {
+          margin-bottom: 10px;
+          padding: 10px;
+          background-color: #f0f0f0;
+          border-radius: 4px;
+        }
+        .history-entry span {
+          margin-right: 10px;
+          font-weight: bold;
+        }
+        .history-entry ul {
+          margin: 5px 0 0;
+          padding-left: 20px;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default InventoryManagement;
