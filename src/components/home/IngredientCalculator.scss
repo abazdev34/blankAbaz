@@ -1,0 +1,142 @@
+.ingredient-calculator {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .quick-select {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+
+    button {
+      padding: 10px 15px;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+      text-align: center;
+
+      &:hover {
+        background-color: #e0e0e0;
+      }
+
+      &.active {
+        background-color: #28a745;
+        color: white;
+      }
+    }
+  }
+
+  .input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+
+      &:active {
+        background-color: #dc3545;
+      }
+    }
+  }
+
+  .result-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+    }
+
+    h3 {
+      margin-top: 20px;
+      color: #333;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .ingredient-calculator {
+    padding: 10px;
+
+    .quick-select {
+      grid-template-columns: repeat(2, 1fr);
+
+      button {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    }
+
+    .input-container {
+      flex-direction: column;
+
+      input, button {
+        width: 100%;
+      }
+    }
+
+    .result-container {
+      padding: 15px;
+
+      table {
+        font-size: 14px;
+
+        th, td {
+          padding: 8px;
+        }
+      }
+    }
+  }
+}

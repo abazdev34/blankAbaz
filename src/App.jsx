@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { Route, Link, Routes } from 'react-router-dom';
 import ReceiveInventory from './components/ReceiveInventory';
 import SendInventory from './components/SendInventory';
 import InventoryStatus from './components/InventoryStatus';
+import ReceiveHistory from './components/ReceiveHistory';
+import SendHistory from './components/SendHistory';
 import './App.scss';
+import Header from './components/header'
+import IngredientCalculator from './components/home/IngredientCalculatorManager'
 
 const App = () => {
   const [inventory, setInventory] = useState({});
@@ -52,12 +57,21 @@ const App = () => {
 
   return (
     <div className="app">
-      <h1>Товар башкаруу системасы</h1>
-      <div className="app-container">
-        <ReceiveInventory onReceive={handleReceive} />
-        <SendInventory onSend={handleSend} inventory={inventory} />
-        <InventoryStatus inventory={inventory} />
-      </div>
+    <Header/>
+
+      <Routes>
+        <Route path="/" element={
+          <div className="app-container">
+            <ReceiveInventory onReceive={handleReceive} />
+            
+          </div>
+        } />
+        <Route path="/send" element={<SendInventory onSend={handleSend} inventory={inventory} /> } />
+        <Route path="/status" element={<InventoryStatus inventory={inventory} />} />gIngredientCalculator/
+        <Route path="/receive-history" element={<ReceiveHistory history={receiveHistory} />} />
+        <Route path="/send-history" element={<SendHistory history={sendHistory} />} />
+        <Route path="/ingredient-calculator" element={<IngredientCalculator/>} />
+      </Routes>
     </div>
   );
 };

@@ -3,11 +3,11 @@ import React from 'react';
 const ReceiveHistory = ({ history }) => {
   return (
     <div className="receive-history">
-      <h2>Кабыл алуу тарыхы</h2>
+      <h2>история поставки</h2>
       <ul>
         {history.map(entry => (
           <li key={entry.id}>
-            {entry.date}: {entry.item} - {entry.amount}
+            {entry.date}: {entry.item}  {entry.amount} принит шт
           </li>
         ))}
       </ul>

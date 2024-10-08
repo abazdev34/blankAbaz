@@ -34,23 +34,23 @@ const SendInventory = ({ onSend, inventory }) => {
 
   return (
     <div className="send-inventory">
-      <h2>Товар жөнөтүү</h2>
+      <h2>Отгрузка товара</h2>
       <input
         type="text"
         value={item}
         onChange={(e) => setItem(e.target.value)}
-        placeholder="Товар аты"
+        placeholder="Название продукта"
         required
       />
       <input
         type="number"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        placeholder="Саны"
+        placeholder="Сумма"
         required
       />
       <button className="add-button" onClick={handleAdd}>
-        <FontAwesomeIcon icon={faPlus} /> Кошуу
+        <FontAwesomeIcon icon={faPlus} /> Чтобы добавить
       </button>
       {tempItems.length > 0 && !isSaved && (
         <button className="save-button" onClick={handleSave}>
@@ -59,7 +59,7 @@ const SendInventory = ({ onSend, inventory }) => {
       )}
       {isSaved && (
         <div className="confirm-section">
-          <p>Товарлар сакталды. Жөнөтүүнү тастыктоо керек.</p>
+          <p>Товар сохранен. Требуется подтверждение доставки.</p>
           <button className="confirm-button" onClick={handleConfirmSend}>
             <FontAwesomeIcon icon={faTruck} />
           </button>

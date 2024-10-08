@@ -1,0 +1,42 @@
+.history-container {
+  background-color: #f9f9f9; /* Light background for the card */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  padding: 16px; /* Padding inside the card */
+  margin: 16px 0; /* Margin around the card */
+  max-width: 400px; /* Maximum width for the card */
+  width: 100%; /* Full width on smaller screens */
+}
+
+.history-container h2 {
+  font-size: 1.5rem; /* Font size for the title */
+  margin-bottom: 12px; /* Space below the title */
+  color: #333; /* Dark color for the title */
+}
+
+.history-container ul {
+  list-style-type: none; /* Remove default list styles */
+  padding: 0; /* Remove padding */
+}
+
+.history-container li {
+  background-color: #fff; /* White background for each entry */
+  border-radius: 4px; /* Rounded corners for entries */
+  padding: 12px; /* Padding inside each entry */
+  margin-bottom: 8px; /* Space between entries */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for entries */
+}
+
+.history-container li strong {
+  color: #007bff; /* Color for the dish name */
+}
+
+.history-container li ul {
+  margin-top: 8px; /* Space above the ingredients list */
+  padding-left: 20px; /* Indent for the ingredients list */
+}
+
+.history-container li ul li {
+  font-size: 0.9rem; /* Smaller font size for ingredients */
+  color: #555; /* Gray color for ingredient text */
+}
