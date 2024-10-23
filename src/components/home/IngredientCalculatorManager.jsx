@@ -80,7 +80,7 @@ const IngredientCalculator = () => {
 
       {result && (
         <div className='result-container'>
-          <h2>Натыйжа:</h2>
+          <h2>Результат:</h2>
           <div className='table-container'>
             <table>
               <thead>
