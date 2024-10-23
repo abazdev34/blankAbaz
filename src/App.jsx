@@ -8,6 +8,7 @@ import SendHistory from './components/SendHistory';
 import './App.scss';
 import Header from './components/header'
 import IngredientCalculator from './components/home/IngredientCalculatorManager'
+import Timer from './components/home/taimer'
 
 const App = () => {
   const [inventory, setInventory] = useState({});
@@ -71,6 +72,8 @@ const App = () => {
         <Route path="/receive-history" element={<ReceiveHistory history={receiveHistory} />} />
         <Route path="/send-history" element={<SendHistory history={sendHistory} />} />
         <Route path="/ingredient-calculator" element={<IngredientCalculator/>} />
+        <Route path="/timer" element={<Timer/>} />
+
       </Routes>
     </div>
   );
