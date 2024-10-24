@@ -1,202 +1,140 @@
 // Timer.scss
-$primary-color: #FF6B6B;
-$secondary-color: #4ECDC4;
-$background-color: #F7F9FC;
-$text-color: #2D3436;
-$success-color: #00B894;
-$pending-color: #B2BEC3;
-
-.app-wrapper {
-  min-height: 100vh;
-  background: linear-gradient(145deg, #f6d365 0%, #fda085 100%);
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.timer-container {
-  max-width: 100%;
-  background: $background-color;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
+.timer {
+  max-width: 600px;
   margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 
-  @media (min-width: 768px) {
-    max-width: 600px;
+  @media (max-width: 768px) {
+    padding: 10px;
   }
-}
 
-.timer-header {
-  text-align: center;
-  margin-bottom: 2rem;
+  &__header {
+    text-align: center;
+    margin-bottom: 20px;
 
-  h1 {
-    font-size: 1.8rem;
-    color: $text-color;
-    margin: 0 0 1rem;
-    font-weight: 700;
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
 
-    @media (min-width: 768px) {
-      font-size: 2.2rem;
+      @media (max-width: 768px) {
+        font-size: 20px;
+      }
     }
   }
-}
 
-.time-display {
-  background: linear-gradient(135deg, $primary-color, darken($primary-color, 15%));
-  padding: 1.5rem;
-  border-radius: 15px;
-  margin: 1.5rem 0;
-  box-shadow: 0 5px 15px rgba($primary-color, 0.3);
-
-  .time-text {
-    font-size: 3.5rem;
-    font-family: 'Digital', monospace;
-    color: white;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-
-    @media (min-width: 768px) {
-      font-size: 4.5rem;
-    }
-  }
-}
-
-.button-container {
-  display: flex;
-  gap: 1rem;
-  margin: 1.5rem 0;
-
-  .control-btn {
-    flex: 1;
-    padding: 1rem;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  &__display {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 20px 0;
     
-    &.start {
-      background: $success-color;
-      color: white;
+    @media (max-width: 768px) {
+      font-size: 36px;
+    }
+  }
 
-      &:hover:not(.disabled) {
-        background: darken($success-color, 5%);
-        transform: translateY(-2px);
-      }
+  &__controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
 
-      &.disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-      }
+  &__button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #45a049;
     }
 
-    &.reset {
-      background: $primary-color;
-      color: white;
+    &--disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    &--reset {
+      background-color: #f44336;
 
       &:hover {
-        background: darken($primary-color, 5%);
-        transform: translateY(-2px);
+        background-color: #da190b;
+      }
+    }
+
+    &--sound {
+      background-color: #2196F3;
+      padding: 10px 15px;
+      font-size: 20px;
+
+      &:hover {
+        background-color: #1976D2;
+      }
+
+      &-off {
+        background-color: #9E9E9E;
       }
     }
   }
-}
 
-.steps-list {
-  margin-top: 2rem;
-}
-
-.step-item {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  margin: 0.5rem 0;
-  background: white;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  border-left: 5px solid $pending-color;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-
-  &.current {
-    background: lighten($secondary-color, 45%);
-    border-left-color: $secondary-color;
-    transform: scale(1.02);
-    box-shadow: 0 5px 15px rgba($secondary-color, 0.2);
-    animation: pulse 2s infinite;
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
-  &.completed {
-    border-left-color: $success-color;
-    opacity: 0.8;
+  &__step {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #4CAF50;
+    border-radius: 5px;
+    color: white;
+    transition: all 0.3s ease;
+
+    @media (max-width: 768px) {
+      padding: 10px;
+    }
+
+    &--completed {
+      background-color: #666;
+    }
+
+    &--active {
+      background-color: #f44336;
+      animation: highlight 4s ease;
+    }
   }
 
-  &.pending {
-    border-left-color: $pending-color;
-  }
-
-  .step-time {
-    font-weight: 700;
+  &__step-time {
     min-width: 70px;
-    color: $text-color;
+    font-weight: bold;
+    margin-right: 15px;
+
+    @media (max-width: 768px) {
+      min-width: 60px;
+      margin-right: 10px;
+    }
   }
 
-  .step-action {
-    flex: 1;
-    margin-left: 1rem;
-    color: $text-color;
-    font-size: 0.95rem;
-
-    @media (min-width: 768px) {
-      font-size: 1.1rem;
-    }
+  &__step-action {
+    flex-grow: 1;
   }
 }
 
-.notification {
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  right: 1rem;
-  background: white;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-  animation: slideUp 0.3s ease-out;
-  z-index: 1000;
-
-  @media (min-width: 768px) {
-    left: auto;
-    right: 1rem;
-    width: 300px;
+@keyframes highlight {
+  0% {
+    transform: scale(1);
   }
-
-  .notification-content {
-    .notification-title {
-      font-weight: 700;
-      color: $text-color;
-      margin-bottom: 0.5rem;
-    }
-
-    .notification-text {
-      color: $text-color;
-    }
+  5% {
+    transform: scale(1.02);
   }
-}
-
-@keyframes pulse {
-  0% { transform: scale(1.02); }
-  50% { transform: scale(1.04); }
-  100% { transform: scale(1.02); }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+  100% {
+    transform: scale(1);
   }
 }
