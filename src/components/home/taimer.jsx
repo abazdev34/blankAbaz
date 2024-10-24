@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Timer.scss';
+import beepSound from '../../assets/zvuk6.mp3'; // Файлдын туура жолун көрсөтүңүз
 
 const Timer = () => {
   const [timeLeft, setTimeLeft] = useState(15 * 60);
@@ -7,8 +8,7 @@ const Timer = () => {
   const [activeStep, setActiveStep] = useState(null);
   const [isSoundEnabled, setSoundEnabled] = useState(true);
 
-  // Built-in beep sound
-  const beepSound = new Audio("data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAASAAAeMwAUFBQUFCIiIiIiIjAwMDAwPz8/Pz8/TU1NTU1NW1tbW1tbaGhoaGhoaHd3d3d3d4aGhoaGhpSUlJSUlKmpqampqbe3t7e3t8bGxsbGxtvb29vb2+rq6urq6vr6+vr6+v///////////////8XEPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+  const beep = new Audio(beepSound); // Импорттолгон үн файлын колдонуу
 
   const steps = [
     { time: 14.83, action: 'Добавьте масло (150г)', type: 'oil' },
@@ -38,22 +38,24 @@ const Timer = () => {
     
     if (step) {
       setActiveStep(step.type);
-      // Play sound if enabled
       if (isSoundEnabled) {
-        beepSound.play().catch(err => console.log('Sound play failed:', err));
-        // Play twice more with delay
-        setTimeout(() => {
-          beepSound.currentTime = 0;
-          beepSound.play().catch(err => console.log('Sound play failed:', err));
-        }, 500);
-        setTimeout(() => {
-          beepSound.currentTime = 0;
-          beepSound.play().catch(err => console.log('Sound play failed:', err));
-        }, 1000);
+        try {
+          beep.play();
+          setTimeout(() => {
+            beep.currentTime = 0;
+            beep.play();
+          }, 500);
+          setTimeout(() => {
+            beep.currentTime = 0;
+            beep.play();
+          }, 1000);
+        } catch (err) {
+          console.error('Sound play failed:', err);
+        }
       }
       setTimeout(() => {
         setActiveStep(null);
-      }, 4000);
+      }, 15000);
     }
   }, [timeLeft, isSoundEnabled]);
 
@@ -61,6 +63,14 @@ const Timer = () => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const increaseTime = () => {
+    setTimeLeft(prevTime => prevTime + 60);
+  };
+
+  const decreaseTime = () => {
+    setTimeLeft(prevTime => Math.max(prevTime - 60, 0));
   };
 
   return (
@@ -73,6 +83,8 @@ const Timer = () => {
       </div>
 
       <div className="timer__controls">
+        <button onClick={increaseTime}>+1 мин</button>
+        <button onClick={decreaseTime}>-1 мин</button>
         <button
           className={`timer__button ${isRunning ? 'timer__button--disabled' : ''}`}
           onClick={() => setIsRunning(true)}
