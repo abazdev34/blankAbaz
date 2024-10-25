@@ -68,10 +68,7 @@ const App = () => {
             
           </div>
         } />
-        <Route path="/send" element={<SendInventory onSend={handleSend} inventory={inventory} /> } />
-        <Route path="/status" element={<InventoryStatus inventory={inventory} />} />gIngredientCalculator/
-        <Route path="/receive-history" element={<ReceiveHistory history={receiveHistory} />} />
-        <Route path="/send-history" element={<SendHistory history={sendHistory} />} />
+     
         <Route path="/ingredient-calculator" element={<IngredientCalculator/>} />
         <Route path="/timer" element={<Timer/>} />
         <Route path="/timer_2" element={<Timer_ovoshi/>} />

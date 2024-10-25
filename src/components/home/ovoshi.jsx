@@ -1,40 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import alertSound from '../../assets/zvuk6.mp3';
 
+import mixSound from '../../assets/vse.mp3';  // Звук для перемешивания
+import doneSound from '../../assets/kon.mp3';  // Звук для завершения
+// Если у вас есть разные звуки, просто замените путь для doneSound на нужный файл
 
 const Timer_ovoshi = () => {
   const [timeLeft, setTimeLeft] = useState(36 * 60); // 36 минут
   const [isRunning, setIsRunning] = useState(false);
   const [activeStep, setActiveStep] = useState(null);
-  const [volume, setVolume] = useState(0.5); // Громкость от 0 до 1
+  const [volume, setVolume] = useState(0.5);
+  const [isMixing, setIsMixing] = useState(false);
 
-  const beep = new Audio(alertSound);
+  // Используем импортированные звуки
+  const alertBeep = new Audio(mixSound);
+  const doneBeep = new Audio(doneSound);
 
-  // Шаги приготовления
   const steps = [
-    { time: 18, action: 'Перемешайте!', type: 'mix' },
-    { time: 5, action: 'Перемешайте!', type: 'mix' },
-    { time: 0, action: 'Готово!', type: 'done' }
+    { time: 18, action: 'Перемешайте!', type: 'mix', duration: 15 },
+    { time: 5, action: 'Перемешайте!', type: 'mix', duration: 15 },
+    { time: 0, action: 'Готово!', type: 'done', duration: 15 }
   ];
 
-  // Воспроизведение звука
-  const playAlert = () => {
+  const playAlert = (isDone = false) => {
     try {
-      beep.volume = volume;
-      beep.currentTime = 0;
-      beep.play();
+      const sound = isDone ? doneBeep : alertBeep;
+      sound.volume = volume;
       
-      // Повторять в течение 20 секунд
       let playCount = 0;
-      const interval = setInterval(() => {
-        playCount++;
-        if (playCount < 10) { // Играть каждые 2 секунды (10 раз за 20 секунд)
-          beep.currentTime = 0;
-          beep.play();
-        } else {
-          clearInterval(interval);
+      const maxPlays = 7; // 7 раз за 15 секунд (каждые 2 секунды)
+      
+      const playSound = () => {
+        if (playCount < maxPlays && !isMixing) {
+          sound.currentTime = 0;
+          sound.play();
+          playCount++;
+          setTimeout(playSound, 2000);
         }
-      }, 2000);
+      };
+      
+      playSound();
     } catch (err) {
       console.error('Ошибка воспроизведения звука:', err);
     }
@@ -54,14 +58,20 @@ const Timer_ovoshi = () => {
 
   useEffect(() => {
     const minutes = Math.floor(timeLeft / 60);
-    const step = steps.find(s => s.time === minutes);
+    const seconds = timeLeft % 60;
+    const step = steps.find(s => s.time === minutes && seconds === 0);
     
     if (step) {
       setActiveStep(step.type);
-      playAlert();
+      if (step.type === 'done') {
+        playAlert(true);
+      } else {
+        playAlert(false);
+      }
+      
       setTimeout(() => {
         setActiveStep(null);
-      }, 20000);
+      }, step.duration * 1000);
     }
   }, [timeLeft]);
 
@@ -71,22 +81,23 @@ const Timer_ovoshi = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleVolumeChange = (e) => {
-    const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
-    beep.volume = newVolume;
+  const handleMixButton = () => {
+    setIsMixing(true);
+    alertBeep.pause();
+    doneBeep.pause();
+    alertBeep.currentTime = 0;
+    doneBeep.currentTime = 0;
+    setActiveStep(null);
+    setTimeout(() => setIsMixing(false), 1000);
   };
 
   return (
     <div className="timer">
-      <div className="timer__header">
-        <h1>Таймер приготовления</h1>
-        <div className="timer__display">{formatTime(timeLeft)}</div>
-      </div>
+      <div className="timer__display">{formatTime(timeLeft)}</div>
 
       <div className="timer__controls">
         <button 
-          className={`timer__button ${isRunning ? 'timer__button--disabled' : ''}`}
+          className={`timer__button timer__button--start ${isRunning ? 'disabled' : ''}`}
           onClick={() => setIsRunning(true)}
           disabled={isRunning}
         >
@@ -102,20 +113,28 @@ const Timer_ovoshi = () => {
         >
           Сброс
         </button>
+        {activeStep === 'mix' && (
+          <button 
+            className="timer__button timer__button--mix"
+            onClick={handleMixButton}
+          >
+            Перемешано
+          </button>
+        )}
       </div>
 
       <div className="timer__volume">
-        <span className="timer__volume-icon">🔈</span>
+        <span>🔈</span>
         <input
           type="range"
           min="0"
           max="1"
           step="0.1"
           value={volume}
-          onChange={handleVolumeChange}
+          onChange={(e) => setVolume(parseFloat(e.target.value))}
           className="timer__volume-slider"
         />
-        <span className="timer__volume-icon">🔊</span>
+        <span>🔊</span>
       </div>
 
       {activeStep && (
@@ -123,28 +142,6 @@ const Timer_ovoshi = () => {
           {steps.find(s => s.type === activeStep)?.action}
         </div>
       )}
-
-      <div className="timer__steps">
-        {steps.map((step, index) => {
-          const minutes = Math.floor(timeLeft / 60);
-          const isCompleted = minutes < step.time;
-          const isActive = step.type === activeStep;
-
-          return (
-            <div
-              key={index}
-              className={`
-                timer__step
-                ${isCompleted ? 'timer__step--completed' : ''}
-                ${isActive ? 'timer__step--active' : ''}
-              `}
-            >
-              <div className="timer__step-time">{step.time} мин</div>
-              <div className="timer__step-action">{step.action}</div>
-            </div>
-          );
-        })}
-      </div>
     </div>
   );
 };

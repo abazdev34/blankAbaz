@@ -283,161 +283,104 @@ ul {
 }
 // Калган стилдер ошол бойдон калат
 .timer {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2rem;
-  text-align: center;
-  background-color: #f5f5f5;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  &__header {
-    margin-bottom: 2rem;
-
-    h1 {
-      font-size: 2rem;
-      color: #333;
-      margin-bottom: 1rem;
-    }
-  }
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &__display {
-    font-size: 4.5rem;
+    font-size: 48px;
     font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
     font-family: monospace;
-    color: #2c3e50;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   &__controls {
     display: flex;
-    gap: 1rem;
+    gap: 10px;
     justify-content: center;
-    margin: 1.5rem 0;
-  }
-
-  &__volume {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    margin: 1rem 0;
-
-    &-slider {
-      width: 200px;
-      height: 20px;
-      -webkit-appearance: none;
-      background: #ddd;
-      outline: none;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-
-      &::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background: #3498db;
-        cursor: pointer;
-        border: 4px solid #fff;
-        box-shadow: -407px 0 0 400px #3498db;
-      }
-    }
-
-    &-icon {
-      font-size: 1.2rem;
-      color: #666;
-    }
+    margin-bottom: 20px;
   }
 
   &__button {
-    padding: 0.8rem 1.5rem;
-    font-size: 1.1rem;
+    padding: 10px 20px;
     border: none;
-    border-radius: 6px;
-    background-color: #3498db;
-    color: white;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    font-size: 16px;
+    transition: background-color 0.3s;
 
-    &:hover {
-      background-color: #2980b9;
-      transform: translateY(-2px);
-    }
+    &--start {
+      background-color: #4CAF50;
+      color: white;
 
-    &:disabled {
-      background-color: #bdc3c7;
-      cursor: not-allowed;
-      transform: none;
+      &:hover {
+        background-color: #45a049;
+      }
+
+      &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
     }
 
     &--reset {
-      background-color: #e74c3c;
+      background-color: #f44336;
+      color: white;
 
       &:hover {
-        background-color: #c0392b;
+        background-color: #da190b;
+      }
+    }
+
+    &--mix {
+      background-color: #2196F3;
+      color: white;
+
+      &:hover {
+        background-color: #1976D2;
       }
     }
   }
 
   &__alert {
-    margin: 1.5rem auto;
-    padding: 1rem;
-    max-width: 80%;
-    background-color: #f1c40f;
-    border-radius: 6px;
-    font-size: 1.2rem;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 18px;
     font-weight: bold;
-    color: #000;
     animation: blink 1s infinite;
 
+    &--mix {
+      background-color: #ff4444;
+      color: white;
+    }
+
     &--done {
-      background-color: #2ecc71;
+      background-color: #4CAF50;
       color: white;
     }
   }
 
-  &__steps {
-    margin-top: 2rem;
+  &__volume {
     display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  &__step {
-    display: flex;
-    gap: 1rem;
     align-items: center;
-    padding: 1rem;
-    background-color: white;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-
-    &--completed {
-      opacity: 0.6;
-      text-decoration: line-through;
-    }
-
-    &--active {
-      background-color: #f1c40f;
-      transform: scale(1.02);
-    }
-
-    &-time {
-      font-weight: bold;
-      min-width: 80px;
-    }
-
-    &-action {
-      flex-grow: 1;
-      text-align: left;
+    gap: 10px;
+    margin: 20px 0;
+    
+    &-slider {
+      flex: 1;
+      height: 4px;
     }
   }
 }
 
 @keyframes blink {
   0% { opacity: 1; }
-  50% { opacity: 0.6; }
+  50% { opacity: 0.5; }
   100% { opacity: 1; }
 }
