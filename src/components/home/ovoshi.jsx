@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import alertSound from '../../assets/alert.mp3';
+import alertSound from '../../assets/zvuk6.mp3';
 
 
 const Timer_ovoshi = () => {
