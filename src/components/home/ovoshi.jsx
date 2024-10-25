@@ -1,43 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import alertSound from "../../assets/zvuk6.mp3";
+import alertSound from '../../assets/alert.mp3';
 
 
 const Timer_ovoshi = () => {
-  const [timeLeft, setTimeLeft] = useState(36 * 60); // 36 минута
+  const [timeLeft, setTimeLeft] = useState(36 * 60); // 36 минут
   const [isRunning, setIsRunning] = useState(false);
   const [activeStep, setActiveStep] = useState(null);
-  const [isSoundEnabled, setSoundEnabled] = useState(true);
+  const [volume, setVolume] = useState(0.5); // Громкость от 0 до 1
 
   const beep = new Audio(alertSound);
 
-  // Эскертүүлөр
+  // Шаги приготовления
   const steps = [
-    { time: 18, action: 'Аралаштырыңыз!', type: 'mix' },
-    { time: 5, action: 'Аралаштырыңыз!', type: 'mix' },
-    { time: 0, action: 'Даяр болду!', type: 'done' }
+    { time: 18, action: 'Перемешайте!', type: 'mix' },
+    { time: 5, action: 'Перемешайте!', type: 'mix' },
+    { time: 0, action: 'Готово!', type: 'done' }
   ];
 
-  // Үн эффектин ойнотуу
+  // Воспроизведение звука
   const playAlert = () => {
-    if (isSoundEnabled) {
-      try {
-        beep.currentTime = 0;
-        beep.play();
-        
-        // 20 секунд бою кайталап ойнотуу
-        let playCount = 0;
-        const interval = setInterval(() => {
-          playCount++;
-          if (playCount < 10) { // 2 секундда бир жолу ойнотот (20 секунд ичинде 10 жолу)
-            beep.currentTime = 0;
-            beep.play();
-          } else {
-            clearInterval(interval);
-          }
-        }, 2000);
-      } catch (err) {
-        console.error('Үндү ойнотууда ката:', err);
-      }
+    try {
+      beep.volume = volume;
+      beep.currentTime = 0;
+      beep.play();
+      
+      // Повторять в течение 20 секунд
+      let playCount = 0;
+      const interval = setInterval(() => {
+        playCount++;
+        if (playCount < 10) { // Играть каждые 2 секунды (10 раз за 20 секунд)
+          beep.currentTime = 0;
+          beep.play();
+        } else {
+          clearInterval(interval);
+        }
+      }, 2000);
+    } catch (err) {
+      console.error('Ошибка воспроизведения звука:', err);
     }
   };
 
@@ -47,6 +46,8 @@ const Timer_ovoshi = () => {
       interval = setInterval(() => {
         setTimeLeft(time => time - 1);
       }, 1000);
+    } else if (timeLeft === 0) {
+      setIsRunning(false);
     }
     return () => clearInterval(interval);
   }, [isRunning, timeLeft]);
@@ -62,7 +63,7 @@ const Timer_ovoshi = () => {
         setActiveStep(null);
       }, 20000);
     }
-  }, [timeLeft, isSoundEnabled]);
+  }, [timeLeft]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -70,30 +71,26 @@ const Timer_ovoshi = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const increaseTime = () => {
-    setTimeLeft(prevTime => prevTime + 60);
-  };
-
-  const decreaseTime = () => {
-    setTimeLeft(prevTime => Math.max(prevTime - 60, 0));
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    beep.volume = newVolume;
   };
 
   return (
     <div className="timer">
       <div className="timer__header">
-        <h1>Таймер</h1>
+        <h1>Таймер приготовления</h1>
         <div className="timer__display">{formatTime(timeLeft)}</div>
       </div>
 
       <div className="timer__controls">
-        <button className="timer__button" onClick={increaseTime}>+1 мүнөт</button>
-        <button className="timer__button" onClick={decreaseTime}>-1 мүнөт</button>
         <button 
           className={`timer__button ${isRunning ? 'timer__button--disabled' : ''}`}
           onClick={() => setIsRunning(true)}
           disabled={isRunning}
         >
-          Баштоо
+          Старт
         </button>
         <button 
           className="timer__button timer__button--reset"
@@ -103,14 +100,22 @@ const Timer_ovoshi = () => {
             setActiveStep(null);
           }}
         >
-          Кайра баштоо
+          Сброс
         </button>
-        <button
-          className={`timer__button timer__button--sound ${!isSoundEnabled ? 'timer__button--sound-off' : ''}`}
-          onClick={() => setSoundEnabled(!isSoundEnabled)}
-        >
-          {isSoundEnabled ? '🔊' : '🔈'}
-        </button>
+      </div>
+
+      <div className="timer__volume">
+        <span className="timer__volume-icon">🔈</span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value={volume}
+          onChange={handleVolumeChange}
+          className="timer__volume-slider"
+        />
+        <span className="timer__volume-icon">🔊</span>
       </div>
 
       {activeStep && (
@@ -134,7 +139,7 @@ const Timer_ovoshi = () => {
                 ${isActive ? 'timer__step--active' : ''}
               `}
             >
-              <div className="timer__step-time">{step.time} мүнөт</div>
+              <div className="timer__step-time">{step.time} мин</div>
               <div className="timer__step-action">{step.action}</div>
             </div>
           );
