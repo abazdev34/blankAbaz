@@ -282,3 +282,140 @@ ul {
   }
 }
 // Калган стилдер ошол бойдон калат
+.timer {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &__header {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__display {
+    font-size: 4.5rem;
+    font-weight: bold;
+    font-family: monospace;
+    color: #2c3e50;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &__controls {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+  }
+
+  &__button {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    &--reset {
+      background-color: #e74c3c;
+
+      &:hover {
+        background-color: #c0392b;
+      }
+    }
+
+    &--sound {
+      background-color: #2ecc71;
+      
+      &:hover {
+        background-color: #27ae60;
+      }
+
+      &-off {
+        background-color: #95a5a6;
+      }
+    }
+  }
+
+  &__alert {
+    margin: 1.5rem auto;
+    padding: 1rem;
+    max-width: 80%;
+    background-color: #f1c40f;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    animation: blink 1s infinite;
+
+    &--done {
+      background-color: #2ecc71;
+      color: white;
+    }
+  }
+
+  &__steps {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__step {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+
+    &--completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
+
+    &--active {
+      background-color: #f1c40f;
+      transform: scale(1.02);
+    }
+
+    &-time {
+      font-weight: bold;
+      min-width: 80px;
+    }
+
+    &-action {
+      flex-grow: 1;
+      text-align: left;
+    }
+  }
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}

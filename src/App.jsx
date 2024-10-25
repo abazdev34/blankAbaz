@@ -9,6 +9,7 @@ import './App.scss';
 import Header from './components/header'
 import IngredientCalculator from './components/home/IngredientCalculatorManager'
 import Timer from './components/home/taimer'
+import Timer_ovoshi from './components/home/ovoshi'
 
 const App = () => {
   const [inventory, setInventory] = useState({});
@@ -73,6 +74,8 @@ const App = () => {
         <Route path="/send-history" element={<SendHistory history={sendHistory} />} />
         <Route path="/ingredient-calculator" element={<IngredientCalculator/>} />
         <Route path="/timer" element={<Timer/>} />
+        <Route path="/timer_2" element={<Timer_ovoshi/>} />
+
 
       </Routes>
     </div>

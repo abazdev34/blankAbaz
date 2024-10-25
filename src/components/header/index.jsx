@@ -24,7 +24,8 @@ const Header = () => {
           <li><Link to="/receive-history" onClick={toggleMenu}>История поставок</Link></li>
           <li><Link to="/send-history" onClick={toggleMenu}>История перевозок</Link></li>
 					<li><Link to="/ingredient-calculator" onClick={toggleMenu}>Калькулятор</Link></li>
-          <li><Link to="/timer" onClick={toggleMenu}>таймер</Link></li>
+          <li><Link to="/timer" onClick={toggleMenu}>фасолефой паста таймер</Link></li>
+          <li><Link to="/timer_2" onClick={toggleMenu}>овоший жарный таймер</Link></li>
         </ul>
       </nav>
     </header>
