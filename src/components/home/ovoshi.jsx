@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import mixSound from '../../assets/vse.mp3';  // Звук для перемешивания
 import doneSound from '../../assets/kon.mp3';  // Звук для завершения
-// Если у вас есть разные звуки, просто замените путь для doneSound на нужный файл
 
 const Timer_ovoshi = () => {
   const [timeLeft, setTimeLeft] = useState(36 * 60); // 36 минут
@@ -88,6 +87,10 @@ const Timer_ovoshi = () => {
     alertBeep.currentTime = 0;
     doneBeep.currentTime = 0;
     setActiveStep(null);
+    
+    // Увеличиваем время на 20 секунд
+    setTimeLeft(prevTime => prevTime + 20);
+    
     setTimeout(() => setIsMixing(false), 1000);
   };
 
