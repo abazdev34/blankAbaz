@@ -64,7 +64,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={
           <div className="app-container">
-            <ReceiveInventory onReceive={handleReceive} />
+            <IngredientCalculator onReceive={IngredientCalculator} />
             
           </div>
         } />

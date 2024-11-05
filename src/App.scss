@@ -282,105 +282,161 @@ ul {
   }
 }
 // Калган стилдер ошол бойдон калат
+// .timer {
+//   max-width: 400px;
+//   margin: 20px auto;
+//   padding: 20px;
+//   background: #fff;
+//   border-radius: 8px;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+//   &__display {
+//     font-size: 48px;
+//     font-weight: bold;
+//     text-align: center;
+//     margin: 20px 0;
+//     font-family: monospace;
+//   }
+
+//   &__controls {
+//     display: flex;
+//     gap: 10px;
+//     justify-content: center;
+//     margin-bottom: 20px;
+//   }
+
+//   &__button {
+//     padding: 10px 20px;
+//     border: none;
+//     border-radius: 4px;
+//     cursor: pointer;
+//     font-size: 16px;
+//     transition: background-color 0.3s;
+
+//     &--start {
+//       background-color: #4CAF50;
+//       color: white;
+
+//       &:hover {
+//         background-color: #45a049;
+//       }
+
+//       &:disabled {
+//         background-color: #cccccc;
+//         cursor: not-allowed;
+//       }
+//     }
+
+//     &--reset {
+//       background-color: #f44336;
+//       color: white;
+
+//       &:hover {
+//         background-color: #da190b;
+//       }
+//     }
+
+//     &--mix {
+//       background-color: #2196F3;
+//       color: white;
+
+//       &:hover {
+//         background-color: #1976D2;
+//       }
+//     }
+//   }
+
+//   &__alert {
+//     padding: 15px;
+//     margin: 10px 0;
+//     border-radius: 4px;
+//     text-align: center;
+//     font-size: 18px;
+//     font-weight: bold;
+//     animation: blink 1s infinite;
+
+//     &--mix {
+//       background-color: #ff4444;
+//       color: white;
+//     }
+
+//     &--done {
+//       background-color: #4CAF50;
+//       color: white;
+//     }
+//   }
+
+//   &__volume {
+//     display: flex;
+//     align-items: center;
+//     gap: 10px;
+//     margin: 20px 0;
+    
+//     &-slider {
+//       flex: 1;
+//       height: 4px;
+//     }
+//   }
+// }
+
+// @keyframes blink {
+//   0% { opacity: 1; }
+//   50% { opacity: 0.5; }
+//   100% { opacity: 1; }
+// }
 .timer {
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  &__display {
-    font-size: 48px;
-    font-weight: bold;
-    text-align: center;
-    margin: 20px 0;
-    font-family: monospace;
-  }
-
-  &__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .hexagon {
+    position: relative;
+    width: 200px;
+    height: 115.47px;
+    background-color: #4caf50;
+    margin: 57.74px 0;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex;
-    gap: 10px;
     justify-content: center;
-    margin-bottom: 20px;
+    align-items: center;
+    .timer__display {
+      font-size: 3rem;
+      color: white;
+      transition: transform 0.2s ease;
+    }
   }
-
-  &__button {
+  .timer__button {
+    margin: 10px;
     padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
+    font-size: 1rem;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-
-    &--start {
-      background-color: #4CAF50;
-      color: white;
-
-      &:hover {
-        background-color: #45a049;
-      }
-
-      &:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
-      }
-    }
-
     &--reset {
-      background-color: #f44336;
+      background-color: red;
       color: white;
-
-      &:hover {
-        background-color: #da190b;
-      }
     }
-
+    &--start {
+      background-color: green;
+      color: white;
+    }
     &--mix {
-      background-color: #2196F3;
-      color: white;
-
-      &:hover {
-        background-color: #1976D2;
-      }
-    }
-  }
-
-  &__alert {
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    animation: blink 1s infinite;
-
-    &--mix {
-      background-color: #ff4444;
-      color: white;
-    }
-
-    &--done {
-      background-color: #4CAF50;
+      background-color: orange;
       color: white;
     }
   }
-
-  &__volume {
+  .timer__volume {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 20px 0;
-    
-    &-slider {
-      flex: 1;
-      height: 4px;
+    span {
+      margin: 0 10px;
     }
   }
-}
-
-@keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
+  .timer__alert {
+    margin-top: 10px;
+    font-size: 1.5rem;
+    &--mix {
+      color: yellow;
+    }
+    &--done {
+      color: blue;
+    }
+  }
 }
