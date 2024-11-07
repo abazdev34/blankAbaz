@@ -20,6 +20,7 @@ const IngredientCalculator = () => {
     'пико',
     'фасоловаяПаста',
     'фасалВаренный',
+    'овошиЖарыных',
   ]
 
   const handleDishSelect = (dish) => {
