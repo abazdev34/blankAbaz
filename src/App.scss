@@ -384,59 +384,223 @@ ul {
 //   50% { opacity: 0.5; }
 //   100% { opacity: 1; }
 // }
-.timer {
+.timer-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  .hexagon {
-    position: relative;
-    width: 200px;
-    height: 115.47px;
-    background-color: #4caf50;
-    margin: 57.74px 0;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  gap: 2rem;
+  padding: 2rem;
+  
+  .timer-circle {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 15px solid #4CAF50;
     display: flex;
     justify-content: center;
     align-items: center;
-    .timer__display {
-      font-size: 3rem;
-      color: white;
-      transition: transform 0.2s ease;
+    transition: all 0.3s ease;
+    
+    &.running {
+      border-color: #f44336;
+      
+      &.yellow {
+        border-color: #FFC107;
+      }
+      
+      &.blue {
+        border-color: #2196F3;
+      }
+    }
+    
+    &.finished {
+      border-color: #000;
+      animation: pulse 1s infinite;
     }
   }
-  .timer__button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    &--reset {
-      background-color: red;
-      color: white;
-    }
-    &--start {
-      background-color: green;
-      color: white;
-    }
-    &--mix {
-      background-color: orange;
-      color: white;
+
+  .timer-display {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .timer-controls {
+    display: flex;
+    gap: 1rem;
+    
+    .timer-button {
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &.start {
+        background-color: #4CAF50;
+        color: white;
+        
+        &:hover {
+          background-color: darken(#4CAF50, 10%);
+        }
+        
+        &.disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+      }
+      
+      &.reset {
+        background-color: #f44336;
+        color: white;
+        
+        &:hover {
+          background-color: darken(#f44336, 10%);
+        }
+      }
     }
   }
-  .timer__volume {
+
+  .volume-control {
     display: flex;
     align-items: center;
-    span {
-      margin: 0 10px;
+    gap: 0.5rem;
+    
+    .volume-slider {
+      width: 100px;
     }
   }
-  .timer__alert {
-    margin-top: 10px;
-    font-size: 1.5rem;
-    &--mix {
-      color: yellow;
+}
+
+// Fireworks Animation
+$green: #4caf50; // Green color for 100%
+$yellow: #ffeb3b; // Yellow color for 50%
+$red: #f44336; // Red color for 0%
+$background-color: #f0f0f0; // Default background color
+
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: $background-color;
+  font-family: 'Arial', sans-serif;
+
+  .timer-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    border: 10px solid $green; // Default border color
+    transition: border-color 0.5s ease;
+
+    &.running {
+      // Dynamic border color based on the timer state
     }
-    &--done {
-      color: blue;
+
+    &.finished {
+      border-color: $red; // Red when finished
     }
+  }
+
+  .timer-display {
+    text-align: center;
+  }
+
+  .timer-controls {
+    margin-top: 20px;
+
+    .timer-button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+
+      &.reset {
+        background-color: $red;
+        color: white;
+
+        &:hover {
+          background-color: darken($red, 10%);
+        }
+      }
+
+      &.start {
+        background-color: $green;
+        color: white;
+
+        &:hover {
+          background-color: darken($green, 10%);
+        }
+
+        &.disabled {
+          background-color: lighten($green, 20%);
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  .volume-control {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+
+    .volume-slider {
+      margin: 0 10px;
+      width: 100px;
+    }
+  }
+
+  .fireworks {
+    position: relative;
+    margin-top: 20px;
+
+    .firework {
+      width: 10px;
+      height: 10px;
+      background-color: yellow;
+      border-radius: 50%;
+      position: absolute;
+      animation: explode 1s forwards;
+
+      &:nth-child(1) {
+        top: 20%;
+        left: 30%;
+        animation-delay: 0s;
+      }
+
+      &:nth-child(2) {
+        top: 40%;
+        left: 50%;
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(3) {
+        top: 60%;
+        left: 70%;
+        animation-delay: 0.4s;
+      }
+    }
+  }
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
   }
 }

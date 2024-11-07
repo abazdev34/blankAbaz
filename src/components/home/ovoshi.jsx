@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import mixSound from '../../assets/vse.mp3';  // Sound for mixing
-import doneSound from '../../assets/kon.mp3';  // Sound for completion
+import mixSound from '../../assets/vse.mp3';
+import doneSound from '../../assets/kon.mp3';
 
 const Timer_ovoshi = () => {
-  const [timeLeft, setTimeLeft] = useState(36 * 60); // 36 minutes
+  const [timeLeft, setTimeLeft] = useState(36 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [activeStep, setActiveStep] = useState(null);
   const [volume, setVolume] = useState(0.5);
   const [isMixing, setIsMixing] = useState(false);
-  const [scale, setScale] = useState(1); // For animation
+  const [showFireworks, setShowFireworks] = useState(false);
 
   const alertBeep = new Audio(mixSound);
   const doneBeep = new Audio(doneSound);
 
   const steps = [
-    { time: 18, action: 'Перемешайте!', type: 'mix', duration: 15 },
-    { time: 5, action: 'Перемешайте!', type: 'mix', duration: 15 },
-    { time: 0, action: 'Готово!', type: 'done', duration: 15 }
+    { time: 18, action: 'Перемешайте!', type: 'mix', duration: 15, color: 'yellow' },
+    { time: 5, action: 'Перемешайте!', type: 'mix', duration: 15, color: 'blue' },
+    { time: 0, action: 'Финиш!', type: 'done', duration: 15, color: 'black' }
   ];
 
   const playAlert = (isDone = false) => {
@@ -25,7 +25,7 @@ const Timer_ovoshi = () => {
       sound.volume = volume;
 
       let playCount = 0;
-      const maxPlays = 7; // 7 times in 15 seconds (every 2 seconds)
+      const maxPlays = 7;
 
       const playSound = () => {
         if (playCount < maxPlays && !isMixing) {
@@ -47,10 +47,13 @@ const Timer_ovoshi = () => {
     if (isRunning && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft(time => time - 1);
-        setScale(prevScale => (prevScale === 1 ? 1.2 : 1)); // Animate scale
       }, 1000);
     } else if (timeLeft === 0) {
       setIsRunning(false);
+      setShowFireworks(true);
+      setTimeout(() => {
+        setShowFireworks(false);
+      }, 3000);
     }
     return () => clearInterval(interval);
   }, [isRunning, timeLeft]);
@@ -75,52 +78,45 @@ const Timer_ovoshi = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleMixButton = () => {
-    setIsMixing(true);
-    alertBeep.pause();
-    doneBeep.pause();
-    alertBeep.currentTime = 0;
-    doneBeep.currentTime = 0;
-    setActiveStep(null);
-    setTimeLeft(prevTime => prevTime + 20);
-    setTimeout(() => setIsMixing(false), 1000);
+  const getTimerClass = () => {
+    if (!isRunning) return 'timer-circle';
+    if (timeLeft === 0) return 'timer-circle finished';
+    const currentMinute = Math.floor(timeLeft / 60);
+    if (currentMinute <= 5) return 'timer-circle running blue';
+    if (currentMinute <= 18) return 'timer-circle running yellow';
+    return 'timer-circle running';
   };
 
   return (
-    <div className="timer">
-      <div className="hexagon">
-        <div className="timer__display" style={{ transform: `scale(${scale})` }}>
+    <div className="timer-container">
+      <div className={getTimerClass()}>
+        <div className="timer-display">
           {formatTime(timeLeft)}
         </div>
       </div>
-      <button
-        className="timer__button timer__button--reset"
-        onClick={() => {
-          setIsRunning(false);
-          setTimeLeft(36 * 60);
-          setActiveStep(null);
-        }}
-      >
-        Сброс
-      </button>
-      <div className="timer__controls">
+      
+      <div className="timer-controls">
         <button
-          className={`timer__button timer__button--start ${isRunning ? 'disabled' : ''}`}
+          className="timer-button reset"
+          onClick={() => {
+            setIsRunning(false);
+            setTimeLeft(36 * 60);
+            setActiveStep(null);
+            setShowFireworks(false);
+          }}
+        >
+          Сброс
+        </button>
+        <button
+          className={`timer-button start ${isRunning ? 'disabled' : ''}`}
           onClick={() => setIsRunning(true)}
           disabled={isRunning}
         >
           Старт
         </button>
-        {activeStep === 'mix' && (
-          <button
-            className="timer__button timer__button--mix"
-            onClick={handleMixButton}
-          >
-            Перемешано
-          </button>
-        )}
       </div>
-      <div className="timer__volume">
+
+      <div className="volume-control">
         <span>🔈</span>
         <input
           type="range"
@@ -129,13 +125,16 @@ const Timer_ovoshi = () => {
           step="0.1"
           value={volume}
           onChange={(e) => setVolume(parseFloat(e.target.value))}
-          className="timer__volume-slider"
+          className="volume-slider"
         />
         <span>🔊</span>
       </div>
-      {activeStep && (
-        <div className={`timer__alert timer__alert--${activeStep}`}>
-          {steps.find(s => s.type === activeStep)?.action}
+
+      {showFireworks && (
+        <div className="fireworks">
+          <div className="firework"></div>
+          <div className="firework"></div>
+          <div className="firework"></div>
         </div>
       )}
     </div>
