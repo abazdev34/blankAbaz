@@ -384,80 +384,124 @@ ul {
 //   50% { opacity: 0.5; }
 //   100% { opacity: 1; }
 // }
+// src/components/Home/Home.scss
+
+// src/components/timer/timer.scss
+// src/components/timer/timer.scss
+
 .timer-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
   padding: 2rem;
+  min-height: 100vh;
+  background-color: #f5f5f5;
   
+  .progress-info {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    height: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
   .timer-circle {
     width: 300px;
     height: 300px;
     border-radius: 50%;
-    border: 15px solid #4CAF50;
+    border: 15px solid #e0e0e0;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.3s ease;
+    position: relative;
+    margin-bottom: 2rem;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      border-radius: 50%;
+      border: 15px solid transparent;
+      border-top: 15px solid #ff0000;
+      transform: rotate(-90deg);
+      transition: all 1s linear;
+      clip-path: polygon(50% 50%, 50% 0, calc(50% + var(--progress)) 0);
+    }
     
     &.running {
-      border-color: #f44336;
-      
-      &.yellow {
-        border-color: #FFC107;
-      }
-      
-      &.blue {
-        border-color: #2196F3;
-      }
+      animation: pulse 2s infinite;
     }
     
     &.finished {
-      border-color: #000;
-      animation: pulse 1s infinite;
+      &::before {
+        background-color: #ff0000;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+      
+      .timer-display {
+        color: white;
+      }
     }
-  }
 
-  .timer-display {
-    font-size: 4rem;
-    font-weight: bold;
-    color: #333;
+    .timer-display {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: #333;
+      z-index: 1;
+      transition: color 0.3s ease;
+    }
   }
 
   .timer-controls {
     display: flex;
     gap: 1rem;
+    margin-bottom: 2rem;
     
     .timer-button {
-      padding: 0.8rem 2rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1.1rem;
       border: none;
-      border-radius: 5px;
-      font-size: 1.2rem;
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      min-width: 120px;
       
-      &.start {
-        background-color: #4CAF50;
+      &.reset {
+        background-color: #ff4444;
         color: white;
         
         &:hover {
-          background-color: darken(#4CAF50, 10%);
-        }
-        
-        &.disabled {
-          background-color: #ccc;
-          cursor: not-allowed;
+          background-color: #cc0000;
         }
       }
       
-      &.reset {
-        background-color: #f44336;
+      &.start, &.continue {
+        background-color: #44ff44;
         color: white;
         
         &:hover {
-          background-color: darken(#f44336, 10%);
+          background-color: #00cc00;
         }
+      }
+      
+      &.pause {
+        background-color: #ffaa44;
+        color: white;
+        
+        &:hover {
+          background-color: #cc7700;
+        }
+      }
+      
+      &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
       }
     }
   }
@@ -465,133 +509,61 @@ ul {
   .volume-control {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+    margin-top: 1rem;
+    
+    .volume-icon {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
     
     .volume-slider {
-      width: 100px;
+      width: 200px;
+      height: 5px;
+      -webkit-appearance: none;
+      background: #d3d3d3;
+      outline: none;
+      border-radius: 5px;
+      
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #4CAF50;
+        border-radius: 50%;
+        cursor: pointer;
+      }
     }
   }
 }
 
-// Fireworks Animation
-$green: #4caf50; // Green color for 100%
-$yellow: #ffeb3b; // Yellow color for 50%
-$red: #f44336; // Red color for 0%
-$background-color: #f0f0f0; // Default background color
-
-.timer-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: $background-color;
-  font-family: 'Arial', sans-serif;
-
-  .timer-circle {
-    width: 200px;
-    height: 200px;
+.fireworks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  pointer-events: none;
+  
+  .firework {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #ff0000, #ffff00);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    color: white;
-    border: 10px solid $green; // Default border color
-    transition: border-color 0.5s ease;
-
-    &.running {
-      // Dynamic border color based on the timer state
-    }
-
-    &.finished {
-      border-color: $red; // Red when finished
-    }
+    animation: explode 1s ease-out forwards;
+    
+    &:nth-child(1) { top: 30%; left: 30%; animation-delay: 0s; }
+    &:nth-child(2) { top: 50%; left: 50%; animation-delay: 0.2s; }
+    &:nth-child(3) { top: 40%; left: 60%; animation-delay: 0.4s; }
   }
+}
 
-  .timer-display {
-    text-align: center;
-  }
-
-  .timer-controls {
-    margin-top: 20px;
-
-    .timer-button {
-      padding: 10px 20px;
-      margin: 0 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-
-      &.reset {
-        background-color: $red;
-        color: white;
-
-        &:hover {
-          background-color: darken($red, 10%);
-        }
-      }
-
-      &.start {
-        background-color: $green;
-        color: white;
-
-        &:hover {
-          background-color: darken($green, 10%);
-        }
-
-        &.disabled {
-          background-color: lighten($green, 20%);
-          cursor: not-allowed;
-        }
-      }
-    }
-  }
-
-  .volume-control {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-
-    .volume-slider {
-      margin: 0 10px;
-      width: 100px;
-    }
-  }
-
-  .fireworks {
-    position: relative;
-    margin-top: 20px;
-
-    .firework {
-      width: 10px;
-      height: 10px;
-      background-color: yellow;
-      border-radius: 50%;
-      position: absolute;
-      animation: explode 1s forwards;
-
-      &:nth-child(1) {
-        top: 20%;
-        left: 30%;
-        animation-delay: 0s;
-      }
-
-      &:nth-child(2) {
-        top: 40%;
-        left: 50%;
-        animation-delay: 0.2s;
-      }
-
-      &:nth-child(3) {
-        top: 60%;
-        left: 70%;
-        animation-delay: 0.4s;
-      }
-    }
-  }
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
 }
 
 @keyframes explode {
@@ -600,7 +572,7 @@ $background-color: #f0f0f0; // Default background color
     opacity: 1;
   }
   100% {
-    transform: scale(3);
+    transform: scale(30);
     opacity: 0;
   }
 }

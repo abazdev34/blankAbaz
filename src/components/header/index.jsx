@@ -19,7 +19,7 @@ const Header = () => {
       <nav className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
         <ul>
           
-					<li><Link to="/ingredient-calculator" onClick={toggleMenu}>Калькулятор</Link></li>
+					<li><Link to="/ingredient-calculator" onClick={toggleMenu}>Тех карта</Link></li>
           <li><Link to="/timer" onClick={toggleMenu}>фасолефой паста таймер</Link></li>
           <li><Link to="/timer_2" onClick={toggleMenu}>овоший жарный таймер</Link></li>
         </ul>

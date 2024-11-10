@@ -1,123 +1,156 @@
+// src/components/timer/timer.jsx
 import React, { useState, useEffect } from 'react';
 import mixSound from '../../assets/vse.mp3';
 import doneSound from '../../assets/kon.mp3';
+import './timer.scss';
 
 const Timer_ovoshi = () => {
-  const [timeLeft, setTimeLeft] = useState(36 * 60);
+  // Негизги состояниелер
+  const [timeLeft, setTimeLeft] = useState(36 * 60); // 36 минута
   const [isRunning, setIsRunning] = useState(false);
-  const [activeStep, setActiveStep] = useState(null);
+  const [isPaused, setIsPaused] = useState(false);
   const [volume, setVolume] = useState(0.5);
-  const [isMixing, setIsMixing] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
 
+  // Аудио объекттери
   const alertBeep = new Audio(mixSound);
   const doneBeep = new Audio(doneSound);
 
+  // Аралык этаптар
   const steps = [
-    { time: 18, action: 'Перемешайте!', type: 'mix', duration: 15, color: 'yellow' },
-    { time: 5, action: 'Перемешайте!', type: 'mix', duration: 15, color: 'blue' },
-    { time: 0, action: 'Финиш!', type: 'done', duration: 15, color: 'black' }
+    { time: 18, action: 'Аралаштырыңыз!', type: 'mix' },
+    { time: 5, action: 'Аралаштырыңыз!', type: 'mix' },
+    { time: 0, action: 'Бүттү!', type: 'done' }
   ];
 
-  const playAlert = (isDone = false) => {
+  // Үн чыгаруу функциясы
+  const playSound = (isDone = false) => {
     try {
       const sound = isDone ? doneBeep : alertBeep;
       sound.volume = volume;
-
-      let playCount = 0;
-      const maxPlays = 7;
-
-      const playSound = () => {
-        if (playCount < maxPlays && !isMixing) {
-          sound.currentTime = 0;
-          sound.play();
-          playCount++;
-          setTimeout(playSound, 2000);
-        }
-      };
-
-      playSound();
-    } catch (err) {
-      console.error('Ошибка воспроизведения звука:', err);
+      sound.play();
+    } catch (error) {
+      console.error('Үн чыгарууда ката:', error);
     }
   };
 
+  // Таймердин иштөөсү
   useEffect(() => {
     let interval = null;
-    if (isRunning && timeLeft > 0) {
+
+    if (isRunning && !isPaused && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft(time => time - 1);
+        setTimeLeft(prevTime => {
+          // Этаптарды текшерүү
+          const minutes = Math.floor((prevTime - 1) / 60);
+          const seconds = (prevTime - 1) % 60;
+          
+          const currentStep = steps.find(s => s.time === minutes && seconds === 0);
+          if (currentStep) {
+            playSound(currentStep.type === 'done');
+          }
+
+          return prevTime - 1;
+        });
       }, 1000);
     } else if (timeLeft === 0) {
       setIsRunning(false);
       setShowFireworks(true);
-      setTimeout(() => {
-        setShowFireworks(false);
-      }, 3000);
+      playSound(true);
+      setTimeout(() => setShowFireworks(false), 3000);
     }
+
     return () => clearInterval(interval);
-  }, [isRunning, timeLeft]);
+  }, [isRunning, isPaused, timeLeft]);
 
-  useEffect(() => {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    const step = steps.find(s => s.time === minutes && seconds === 0);
-
-    if (step) {
-      setActiveStep(step.type);
-      playAlert(step.type === 'done');
-      setTimeout(() => {
-        setActiveStep(null);
-      }, step.duration * 1000);
-    }
-  }, [timeLeft]);
-
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  // Убакытты форматтоо
+  const formatTime = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const getTimerClass = () => {
-    if (!isRunning) return 'timer-circle';
-    if (timeLeft === 0) return 'timer-circle finished';
-    const currentMinute = Math.floor(timeLeft / 60);
-    if (currentMinute <= 5) return 'timer-circle running blue';
-    if (currentMinute <= 18) return 'timer-circle running yellow';
-    return 'timer-circle running';
+  // Прогрессти эсептөө
+  const getProgressPercentage = () => {
+    const totalSeconds = 36 * 60;
+    return ((totalSeconds - timeLeft) / totalSeconds) * 100;
+  };
+
+  // Таймерди башкаруу функциялары
+  const handleStart = () => {
+    setIsRunning(true);
+    setIsPaused(false);
+  };
+
+  const handlePause = () => {
+    setIsPaused(true);
+    setIsRunning(false);
+  };
+
+  const handleReset = () => {
+    setIsRunning(false);
+    setIsPaused(false);
+    setTimeLeft(36 * 60);
+    setShowFireworks(false);
   };
 
   return (
     <div className="timer-container">
-      <div className={getTimerClass()}>
+      {/* Прогресс индикатору */}
+      <div className="progress-info">
+        {steps.find(s => s.time === Math.floor(timeLeft / 60))?.action || '\u00A0'}
+      </div>
+
+      {/* Таймер айланасы */}
+      <div 
+        className={`timer-circle ${isRunning ? 'running' : ''} ${timeLeft === 0 ? 'finished' : ''}`}
+        style={{ '--progress': `${getProgressPercentage()}%` }}
+      >
         <div className="timer-display">
           {formatTime(timeLeft)}
         </div>
       </div>
       
+      {/* Башкаруу баскычтары */}
       <div className="timer-controls">
         <button
           className="timer-button reset"
-          onClick={() => {
-            setIsRunning(false);
-            setTimeLeft(36 * 60);
-            setActiveStep(null);
-            setShowFireworks(false);
-          }}
+          onClick={handleReset}
         >
-          Сброс
+          Кайра баштоо
         </button>
-        <button
-          className={`timer-button start ${isRunning ? 'disabled' : ''}`}
-          onClick={() => setIsRunning(true)}
-          disabled={isRunning}
-        >
-          Старт
-        </button>
+
+        {!isRunning && !isPaused && timeLeft !== 36 * 60 && (
+          <button
+            className="timer-button continue"
+            onClick={handleStart}
+          >
+            Улантуу
+          </button>
+        )}
+
+        {!isRunning && timeLeft === 36 * 60 && (
+          <button
+            className="timer-button start"
+            onClick={handleStart}
+          >
+            Баштоо
+          </button>
+        )}
+
+        {isRunning && (
+          <button
+            className="timer-button pause"
+            onClick={handlePause}
+          >
+            Тындыруу
+          </button>
+        )}
       </div>
 
+      {/* Үндүн көлөмүн жөндөө */}
       <div className="volume-control">
-        <span>🔈</span>
+        <span className="volume-icon">🔈</span>
         <input
           type="range"
           min="0"
@@ -127,9 +160,10 @@ const Timer_ovoshi = () => {
           onChange={(e) => setVolume(parseFloat(e.target.value))}
           className="volume-slider"
         />
-        <span>🔊</span>
+        <span className="volume-icon">🔊</span>
       </div>
 
+      {/* Фейерверк анимациясы */}
       {showFireworks && (
         <div className="fireworks">
           <div className="firework"></div>
