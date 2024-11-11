@@ -10,6 +10,7 @@ import Header from './components/header'
 import IngredientCalculator from './components/home/IngredientCalculatorManager'
 import Timer from './components/home/taimer'
 import Timer_ovoshi from './components/home/ovoshi'
+import SavedResults from './components/home/results'
 
 const App = () => {
   const [inventory, setInventory] = useState({});
@@ -62,16 +63,12 @@ const App = () => {
     <Header/>
 
       <Routes>
-        <Route path="/" element={
-          <div className="app-container">
-            <IngredientCalculator onReceive={IngredientCalculator} />
-            
-          </div>
-        } />
+        
      
         <Route path="/ingredient-calculator" element={<IngredientCalculator/>} />
-        <Route path="/timer" element={<Timer/>} />
+        <Route path="/timer" element={<SavedResults/>} />
         <Route path="/timer_2" element={<Timer_ovoshi/>} />
+        
 
 
       </Routes>
