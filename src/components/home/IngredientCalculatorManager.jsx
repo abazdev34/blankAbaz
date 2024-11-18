@@ -32,6 +32,7 @@ const IngredientCalculator = () => {
     'фасоловаяПаста',
     'фасалВаренный',
     'овошиЖарыных',
+    'Гуакамоле'
   ]
 
   const handleDishSelect = (dish) => {
