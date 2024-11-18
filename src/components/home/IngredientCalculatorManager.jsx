@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ingredientsData } from '../../data/index.jsx'
-import SavedResults from '../home/results.jsx'
-
 
 const IngredientCalculator = () => {
   const [selectedDish, setSelectedDish] = useState('')
@@ -9,16 +7,6 @@ const IngredientCalculator = () => {
   const [totalWeight, setTotalWeight] = useState(0)
   const [multiplier, setMultiplier] = useState(1)
   const [isCalculating, setIsCalculating] = useState(false)
-  const [savedData, setSavedData] = useState(() => {
-    // Локал сторэжден маалыматтарды алуу
-    const saved = localStorage.getItem('savedResults')
-    return saved ? JSON.parse(saved) : []
-  })
-
-  // Маалыматтар өзгөргөндө локал сторэжди жаңыртуу
-  useEffect(() => {
-    localStorage.setItem('savedResults', JSON.stringify(savedData))
-  }, [savedData])
 
   const quickSelectDishes = [
     'курицаМ',
@@ -61,30 +49,6 @@ const IngredientCalculator = () => {
     setResult(calculatedIngredients)
     setTotalWeight(total)
     setTimeout(() => setIsCalculating(false), 300)
-  }
-
-  const saveResults = () => {
-    if (!result || !selectedDish) return
-
-    const newSavedResult = {
-      id: Date.now(), // уникалдуу ID
-      date: new Date().toISOString(),
-      dishName: selectedDish,
-      totalWeight: totalWeight,
-      ingredients: result
-    }
-
-    setSavedData(prev => [newSavedResult, ...prev])
-    
-    // Жыйынтыктарды тазалоо
-    setResult(null)
-    setTotalWeight(0)
-    setSelectedDish('')
-    setMultiplier(1)
-  }
-
-  const handleDelete = (id) => {
-    setSavedData(prev => prev.filter(item => item.id !== id))
   }
 
   return (
@@ -140,20 +104,8 @@ const IngredientCalculator = () => {
             </table>
           </div>
           <h3>Жалпы салмак: {totalWeight.toFixed(3)} кг</h3>
-          <button
-            onClick={saveResults}
-            className="bg-green-500 text-white px-4 py-2 rounded mt-4 hover:bg-green-600"
-          >
-            Сактоо
-          </button>
         </div>
       )}
-
-      {/* Сакталган жыйынтыктарды көрсөтүү */}
-      <SavedResults 
-        savedData={savedData} 
-        onDelete={handleDelete}
-      />
     </div>
   )
 }
