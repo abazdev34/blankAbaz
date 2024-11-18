@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Route, Link, Routes } from 'react-router-dom';
-import ReceiveInventory from './components/ReceiveInventory';
-import SendInventory from './components/SendInventory';
-import InventoryStatus from './components/InventoryStatus';
-import ReceiveHistory from './components/ReceiveHistory';
-import SendHistory from './components/SendHistory';
+import { useState, useEffect } from 'react';
+import { Route,  Routes } from 'react-router-dom';
+
 import './App.scss';
 import Header from './components/header'
 import IngredientCalculator from './components/home/IngredientCalculatorManager'
-import Timer from './components/home/taimer'
+
 import Timer_ovoshi from './components/home/ovoshi'
-import SavedResults from './components/home/results'
+
 
 const App = () => {
   const [inventory, setInventory] = useState({});
@@ -35,29 +31,9 @@ const App = () => {
   }, [inventory, receiveHistory, sendHistory]);
 
   // Товарды кабыл алуу функциясы
-  const handleReceive = (item, amount) => {
-    setInventory(prev => ({
-      ...prev,
-      [item]: (prev[item] || 0) + amount
-    }));
-    setReceiveHistory(prev => [
-      { id: Date.now(), date: new Date().toLocaleString(), item, amount },
-      ...prev
-    ]);
-  };
 
   // Товарды жөнөтүү функциясы
-  const handleSend = (item, amount) => {
-    setInventory(prev => ({
-      ...prev,
-      [item]: Math.max(0, (prev[item] || 0) - amount)
-    }));
-    setSendHistory(prev => [
-      { id: Date.now(), date: new Date().toLocaleString(), item, amount },
-      ...prev
-    ]);
-  };
-
+ 
   return (
     <div className="app">
     <Header/>
@@ -66,7 +42,7 @@ const App = () => {
         
      
         <Route path="/ingredient-calculator" element={<IngredientCalculator/>} />
-        <Route path="/timer" element={<SavedResults/>} />
+      
         <Route path="/timer_2" element={<Timer_ovoshi/>} />
         
 
