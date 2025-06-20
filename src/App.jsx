@@ -1,36 +1,10 @@
-
-import { Route,  Routes } from 'react-router-dom';
-
-import './App.scss';
-import Header from './components/header'
-import IngredientCalculator from './components/home/IngredientCalculatorManager'
-
-import Timer_ovoshi from './components/home/ovoshi'
-
-
+import BarcodeScanner from './components/BarcodeScanner'
+import './components/styles/styles.scss';
 const App = () => {
-
-  // Локалдык сактоодон инвентаризацияны жүктөө
-
- 
-  // Товарды кабыл алуу функциясы
-
-  // Товарды жөнөтүү функциясы
- 
   return (
-    <div className="app">
-    <Header/>
-
-      <Routes>
-        
-     
-        <Route path="/ingredient-calculator" element={<IngredientCalculator/>} />
+    <div className="App">
+      <BarcodeScanner />
       
-        <Route path="/timer_2" element={<Timer_ovoshi/>} />
-        
-
-
-      </Routes>
     </div>
   );
 };
